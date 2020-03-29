@@ -6,5 +6,5 @@ include_directories(${OpenCV_INCLUDE_DIRS})
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(opencv main.cpp)
+add_executable(opencv src/main.cpp src/boost_tree.cpp src/decision_tree.cpp src/ann.cpp)
 target_link_libraries(opencv ${OpenCV_LIBS})
