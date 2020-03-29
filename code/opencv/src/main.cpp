@@ -8,8 +8,9 @@ auto run_tests() -> void {
 /**
  * Placeholder until runner class is written
  */
-
 auto decision_tree(int argc, char** argv) -> int;
+auto boost_tree(int argc, char** argv) -> int;
+auto ann(int argc, char** argv) -> int;
 
 auto main(int argc, char** argv) -> int {
 
@@ -36,12 +37,12 @@ auto main(int argc, char** argv) -> int {
     /**
      * Placeholder
      */
-    auto m1_status = decision_tree(argc, argv);
-
-    if (m1_status != 0) {
-        std::cerr << "Decision tree failed." << std::endl;
-        return -1;
-    }
+//    auto m1_status = decision_tree(argc, argv);
+//
+//    if (m1_status != 0) {
+//        std::cerr << "Decision tree failed." << std::endl;
+//        return -1;
+//    }
 
     std::cout << "Method 1 finished." << std::endl;
 
@@ -51,6 +52,16 @@ auto main(int argc, char** argv) -> int {
     auto method2_name = "Boost tree";
     std::cout << "Method 2 [" << method2_name << "] starting..." << std::endl;
 
+    /**
+     * Placeholder
+     */
+//    auto m2_status = boost_tree(argc, argv);
+//
+//    if (m2_status != 0) {
+//        std::cerr << "Boost tree failed." << std::endl;
+//        return -1;
+//    }
+
     std::cout << "Method 2 finished." << std::endl;
 
     /**
@@ -58,6 +69,16 @@ auto main(int argc, char** argv) -> int {
      */
     auto method3_name = "ANN";
     std::cout << "Method 3 [" << method3_name << "] starting..." << std::endl;
+
+    /**
+     * Placeholder
+     */
+    auto m3_status = ann(argc, argv);
+
+    if (m3_status != 0) {
+        std::cerr << "ANN failed." << std::endl;
+        return -1;
+    }
 
     std::cout << "Method 3 finished." << std::endl;
 
