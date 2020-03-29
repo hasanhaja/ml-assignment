@@ -1,7 +1,17 @@
 #include <iostream>
 #include <opencv2/opencv.hpp>
 
-auto main() -> int {
+auto run_tests() -> void {
+    // test 1 should be the csv reading test
+}
+
+/**
+ * Placeholder until runner class is written
+ */
+
+auto decision_tree(int argc, char** argv) -> int;
+
+auto main(int argc, char** argv) -> int {
 
     /**
      * Todo: What do I have to do with the "3 continous and others binary" information?
@@ -23,6 +33,16 @@ auto main() -> int {
     auto method1_name = "Binary tree";
     std::cout << "Method 1 [" << method1_name << "] starting..." << std::endl;
 
+    /**
+     * Placeholder
+     */
+    auto m1_status = decision_tree(argc, argv);
+
+    if (m1_status != 0) {
+        std::cerr << "Decision tree failed." << std::endl;
+        return -1;
+    }
+
     std::cout << "Method 1 finished." << std::endl;
 
     /**
@@ -31,7 +51,7 @@ auto main() -> int {
     auto method2_name = "Boost tree";
     std::cout << "Method 2 [" << method2_name << "] starting..." << std::endl;
 
-    std::cout << "Method 1 finished." << std::endl;
+    std::cout << "Method 2 finished." << std::endl;
 
     /**
      * Method 3 starts and produces results
@@ -39,7 +59,7 @@ auto main() -> int {
     auto method3_name = "ANN";
     std::cout << "Method 3 [" << method3_name << "] starting..." << std::endl;
 
-    std::cout << "Method 1 finished." << std::endl;
+    std::cout << "Method 3 finished." << std::endl;
 
     /**
      * ----------- All methods finished -----------

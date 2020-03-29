@@ -26,9 +26,9 @@ The data was labelled.
 
 ## Plan
 
-### Tree based
+### Tree-based methods
 
-Decision tree, Random Forest or Boost tree
+Decision tree, Random Forest or Boost tree. **Decision forest and cascades is close to the state of the art.**
 It might be a binary decision tree because of the duality of the classification
 
 - Each node represents an attribute
@@ -36,17 +36,42 @@ It might be a binary decision tree because of the duality of the classification
 - From Introduction to Machine Learning textbook Nilsson
   > For categorical and numeric attributes, wemust also decide what the tests should be (besides selecting the order). Severaltechniques have been tried; the most popular one is at each stage to select thattest that maximally reduces an entropy-like measure
 
-### ANN
+#### Pros
+
+- Boost introduces weights for each classifier based on performance **citation requires**
+- Works best with weak classifiers. **What does this mean?**
+- Can learn non-linear relationships [[source](https://elitedatascience.com/machine-learning-algorithms)]
+
+#### Cons
+
+- Unconstrained and prone to overfitting. Can be alleviated using ensembles **What?** [[source](https://elitedatascience.com/machine-learning-algorithms)]
+- As tree complexity increases, overfitting starts to occur. Avoid it by post-pruning the tree.
+- Boosting increases overfitting
+
+### ANN method
 
 - Examples to work from: Lab 4
 
-### Bayesian
+#### Pros
+
+- Good performance
+- Can be updated with new data using batch propogation [[source](https://elitedatascience.com/machine-learning-algorithms)]
+
+#### Cons
+
+- Requires very large amount of data
+- Outperformed by tree ensembles for classical machine learning problems [[source](https://elitedatascience.com/machine-learning-algorithms)]
+- Computationally intensive to train
+
+### Bayesian method
 
 If assuming or willing to assume the attributes are independent and normally distributed.
 
 ### Method selection
 
 Comparison of the methods:
+
+**TODO** decision matrix
 
 ## Data splitting
 
