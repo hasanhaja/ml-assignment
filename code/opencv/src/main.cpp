@@ -10,8 +10,6 @@ auto run_tests() -> void {
  */
 auto decision_tree(int argc, char** argv) -> int;
 auto boost_tree(int argc, char** argv) -> int;
-auto ann(int argc, char** argv) -> int;
-auto bayes(int argc, char** argv) -> int;
 auto forest(int argc, char** argv) -> int;
 
 auto main(int argc, char** argv) -> int {
@@ -39,12 +37,12 @@ auto main(int argc, char** argv) -> int {
     /**
      * Placeholder
      */
-//    auto m1_status = decision_tree(argc, argv);
-//
-//    if (m1_status != 0) {
-//        std::cerr << "Decision tree failed." << std::endl;
-//        return -1;
-//    }
+    auto m1_status = decision_tree(argc, argv);
+
+    if (m1_status != 0) {
+        std::cerr << "Decision tree failed." << std::endl;
+        return -1;
+    }
 
     std::cout << "Method 1 finished." << std::endl;
 
@@ -57,12 +55,12 @@ auto main(int argc, char** argv) -> int {
     /**
      * Placeholder
      */
-//    auto m2_status = boost_tree(argc, argv);
-//
-//    if (m2_status != 0) {
-//        std::cerr << "Boost tree failed." << std::endl;
-//        return -1;
-//    }
+    auto m2_status = boost_tree(argc, argv);
+
+    if (m2_status != 0) {
+        std::cerr << "Boost tree failed." << std::endl;
+        return -1;
+    }
 
     std::cout << "Method 2 finished." << std::endl;
 
