@@ -11,6 +11,8 @@ auto run_tests() -> void {
 auto decision_tree(int argc, char** argv) -> int;
 auto boost_tree(int argc, char** argv) -> int;
 auto ann(int argc, char** argv) -> int;
+auto bayes(int argc, char** argv) -> int;
+auto forest(int argc, char** argv) -> int;
 
 auto main(int argc, char** argv) -> int {
 
@@ -67,16 +69,16 @@ auto main(int argc, char** argv) -> int {
     /**
      * Method 3 starts and produces results
      */
-    auto method3_name = "ANN";
+    auto method3_name = "Forest";
     std::cout << "Method 3 [" << method3_name << "] starting..." << std::endl;
 
     /**
-     * Placeholder
-     */
-    auto m3_status = ann(argc, argv);
+    * Placeholder
+    */
+    auto m3_status = forest(argc, argv);
 
     if (m3_status != 0) {
-        std::cerr << "ANN failed." << std::endl;
+        std::cerr << "Forest failed." << std::endl;
         return -1;
     }
 

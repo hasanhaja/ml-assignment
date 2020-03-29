@@ -41,12 +41,15 @@ namespace util::file {
                         // adverts are class 1
 
                         classes.at<float>(line, 0) = 1.0;
+//                        classes.at<double>(line, 0) = 1.0;
+
                     }
                     else if (strcmp(tmps, "nonad.") == 0)
                     {
                         // non adverts are class 2
 
                         classes.at<float>(line, 0) = 0.0;
+//                        classes.at<double>(line, 0) = 0.0;
                     }
 #if PRINT_CSV_FILE_INPUTS
                     printf("%s\n", tmps);
@@ -58,8 +61,10 @@ namespace util::file {
                     // store all other data as floating point
 
                     fscanf(f, "%f,", &(data.at<float>(line, attribute)));
+//                    fscanf(f, "%lf,", &(data.at<double>(line, attribute)));
 #if PRINT_CSV_FILE_INPUTS
                     printf("%f,", data.at<float>(line, attribute));
+//                    printf("%lf,", data.at<double>(line, attribute));
 #endif
                 }
             }

@@ -144,6 +144,7 @@ auto ann(int argc, char** argv) -> int {
             // is not "1" (i.e. this is the correct class) then record this
 
             if (!(testing_classifications.at<float>(tsample, max_loc.x)))
+//            if (!(testing_classifications.at<double>(tsample, max_loc.x)))
             {
                 // if they differ more than floating point error => wrong class
 

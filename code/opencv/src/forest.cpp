@@ -2,6 +2,10 @@
 // Created by Hasan on 29/03/20.
 //
 
+//
+// Created by Hasan on 29/03/20.
+//
+
 
 // Example : ML assignment data reader 2011
 // usage: prog training_data_file testing_data_file
@@ -25,7 +29,7 @@ using namespace util::consts;
 using namespace util::file;
 /******************************************************************************/
 
-auto decision_tree(int argc, char** argv) -> int {
+auto forest(int argc, char** argv) -> int {
 
     // define training data storage matrices (one for attribute examples, one
     // for classifications)
@@ -48,6 +52,8 @@ auto decision_tree(int argc, char** argv) -> int {
 
     var_type.at<uchar>(ATTRIBUTES_PER_SAMPLE, 0) = VAR_CATEGORICAL;
 
+    double result; // value returned from a prediction
+
     // load training and testing data sets
 
     if (read_data_from_csv(argv[1], training_data, training_classifications, NUMBER_OF_TRAINING_SAMPLES) &&
@@ -57,29 +63,33 @@ auto decision_tree(int argc, char** argv) -> int {
 
         // DO YOUR ML HERE
 
-        // define the parameters for training the decision tree
-        std::vector<double> priors(2); // weights of each classification for classes
+        // define the parameters for training the random forest (trees)
+        std::vector<double> priors(2);
+
         priors[0] = 1;
         priors[1] = 1;
         // weights of each classification for classes
         // (all equal as equal samples of each digit)
 
-        Ptr<DTrees> dtree = DTrees::create();
-        dtree->setMaxDepth(25);// max depth
-        dtree->setMinSampleCount(5);// min sample count
-        dtree->setRegressionAccuracy(0);// regression accuracy: N/A here
-        dtree->setUseSurrogates(false);// compute surrogate split, no missing data
-        dtree->setMaxCategories(15);// max number of categories (use sub-optimal algorithm for larger numbers)
-        dtree->setCVFolds(1);// the number of cross-validation folds
-        dtree->setUse1SERule(false);// use 1SE rule => smaller tree
-        dtree->setTruncatePrunedTree(false);// throw away the pruned tree branches
-        dtree->setPriors(Mat(priors));// the array of priors
+        Ptr<RTrees> rtree = RTrees::create();
+        rtree->setMaxDepth(25);							// max depth
+        rtree->setMinSampleCount(5);					// min sample count
+        rtree->setUseSurrogates(false);					// compute surrogate split, no missing data
+        rtree->setMaxCategories(15);					// max number of categories (use sub-optimal algorithm for larger numbers)
+        rtree->setPriors(Mat(priors));					// the array of priors
+        rtree->setCalculateVarImportance(false);		// calculate variable importance
+        rtree->setRegressionAccuracy(0.01f);			// forrest accuracy
+        rtree->setUse1SERule(true);						// number of variables randomly selected at node and used to find the best split(s).
+        rtree->setTruncatePrunedTree(true);				// max number of trees in the forest
+        TermCriteria val = TermCriteria(TermCriteria::COUNT + TermCriteria::EPS, 100, 0.01);	// // termination cirteria
+        rtree->setTermCriteria(val);
+        rtree->setCVFolds(0);							// regression accuracy: N/A here
 
-        // train decision tree classifier (using training data)
+        // train extreme random forest classifier (using training data)
 
         printf("\nUsing training database: %s\n\n", argv[1]);
 
-        dtree->train(training_data, ROW_SAMPLE, training_classifications);
+        rtree->train(training_data, ROW_SAMPLE, training_classifications);
 
         // perform classifier testing and report results
 
@@ -97,9 +107,9 @@ auto decision_tree(int argc, char** argv) -> int {
 
             test_sample = testing_data.row(tsample);
 
-            // run decision tree prediction
+            // run random forest prediction
 
-            float result = dtree->predict(test_sample, noArray(), StatModel::Flags::RAW_OUTPUT);
+            result = rtree->predict(test_sample, noArray(), StatModel::Flags::RAW_OUTPUT);
 
             printf("Testing Sample %i -> class result (digit %d)\n", tsample, (int)result);
 
@@ -108,7 +118,6 @@ auto decision_tree(int argc, char** argv) -> int {
 
             if (fabs(result - testing_classifications.at<float>(tsample, 0))
                 >= FLT_EPSILON)
-
             {
                 // if they differ more than floating point error => wrong class
 
@@ -139,8 +148,6 @@ auto decision_tree(int argc, char** argv) -> int {
                    false_positives[i],
                    (double)false_positives[i] * 100 / NUMBER_OF_TESTING_SAMPLES);
         }
-
-
 
         //*********************************************************************
 
