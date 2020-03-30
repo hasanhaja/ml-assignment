@@ -5,8 +5,17 @@
 #include "file.h"
 
 namespace util::file {
-    auto read_data_from_csv(const char* filename, cv::Mat& data, cv::Mat& classes, int n_samples) -> int {
 
+    namespace {
+        auto calculate_max_line(int percentage) -> int {
+
+            int max;
+
+            return max;
+        }
+    }
+
+    auto read_data_from_csv(const char* filename, cv::Mat& data, cv::Mat& classes, int n_samples) -> int {
         using namespace util::consts;
         using namespace std;
 
@@ -75,12 +84,128 @@ namespace util::file {
         return 1; // all okay
     }
 
-    auto randomize_data_in_csv() -> void {
-        std::vector<int> v = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+    /**
+     * This function was adapted from the resources provided for the assignment.
+     * @param input_file
+     * @param output_file
+     * @return
+     */
+    auto randomize_data_in_csv(const char* input_file, const char* output_file) -> int {
+        using namespace std;
 
-        std::random_device rd;
-        std::mt19937 g(rd());
+        vector<char *> inputlines; 				// vector of input lines
+        vector<char *>::iterator outline;		// iterator for above
 
-        std::shuffle(v.begin(), v.end(), g);
+        char * line = nullptr;						// tmp pointer for line memory
+
+        // open input file
+
+        FILE* fi = fopen( input_file, "r" );
+        if( !fi ){
+            printf("ERROR: cannot read input file %s\n",  input_file);
+            return -1; // all not OK
+        }
+
+        // open output file
+
+        FILE* fw = fopen( output_file, "w" );
+        if( !fw ){
+            printf("ERROR: cannot read output file %s\n",  output_file);
+            return -1; // all not OK
+        }
+
+        // read in all the lines of the file (allocating fresh memory for each)
+
+        while (!feof(fi))
+        {
+            line = (char *) malloc(LINELENGTHMAX * sizeof(char));
+            fscanf(fi, "%[^\n]\n", line);
+            inputlines.push_back(line);
+        }
+
+        // shuffle input file lines
+
+        random_device rd;
+        mt19937 g(rd());
+
+        shuffle(inputlines.begin(), inputlines.end(), g);
+
+        // output all of the lines to output file
+
+        for(outline = inputlines.begin(); outline < inputlines.end(); outline++)
+        {
+            fprintf(fw, "%s\n", *outline);
+            free((void *) *outline); // free memory also
+        }
+
+        // close files
+
+        fclose(fi);
+        fclose(fw);
+
+        return 1;
+    }
+
+    auto split_csv_data(int min_l, int max_l, const char* input_file, const char* output_file) -> int {
+        using namespace std;
+
+        vector<char *> inputlines; 				// vector of input lines
+        vector<char *>::iterator outline;		// iterator for above
+
+        char * line = nullptr;						// tmp pointer for line memory
+
+        // get min / max line numbers
+
+        int minL = min(min_l, max_l);
+        int maxL = max(min_l, max_l);
+
+        int lineN = 0;
+
+        // open input file
+
+        FILE* fi = fopen( input_file, "r" );
+        if( !fi ){
+            printf("ERROR: cannot read input file %s\n",  input_file);
+            return -1; // all not OK
+        }
+
+        // open output file
+
+        FILE* fw = fopen( output_file, "w" );
+        if( !fw ){
+            printf("ERROR: cannot read output file %s\n",  output_file);
+            return -1; // all not OK
+        }
+
+        // read in all the lines of the file (allocating fresh memory for each)
+
+        while (!feof(fi))
+        {
+            line = (char *) malloc(LINELENGTHMAX * sizeof(char));
+            fscanf(fi, "%[^\n]\n", line);
+            inputlines.push_back(line);
+        }
+
+        // output seleted lines to output file
+        /**
+         * Todo, the remainder should go in another file
+         */
+        for(outline = inputlines.begin(); outline < inputlines.end(); outline++)
+        {
+            if ((lineN >= minL) && (lineN <= maxL))
+            {
+                fprintf(fw, "%s\n", *outline);
+            }
+            lineN++;
+
+            free((void *) *outline); // free memory also
+        }
+
+        // close files
+
+        fclose(fi);
+        fclose(fw);
+
+        return 1;
     }
 }

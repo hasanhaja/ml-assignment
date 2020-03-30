@@ -28,7 +28,7 @@ auto main(int argc, char** argv) -> int {
      * ./progname ad.train ad.test
      */
     std::string prep_flag = "--dataprep";
-    
+
     if (prep_flag.compare(argv[1]) == 0) {
         return randomize_and_split(argc, argv);
     }
@@ -118,6 +118,10 @@ auto run_methods(int argc, char** argv) -> int {
 
 auto randomize_and_split(int argc, char** argv) -> int {
     std::cout << "Entering data prep mode" << std::endl;
+
+    /**
+     * NOTE: argv[1] is the flag --dataprep, so start at argv[2]
+     */
 
     std::cout << "Data prep complete." << std::endl;
     return 0;
