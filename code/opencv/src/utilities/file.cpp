@@ -146,7 +146,7 @@ namespace util::file {
         return 1;
     }
 
-    auto split_csv_data(int min_l, int max_l, const char* input_file, const char* output_file) -> int {
+    auto split_csv_data(int max_l, const char* input_file, const char* output_file) -> int {
         using namespace std;
 
         vector<char *> inputlines; 				// vector of input lines
@@ -156,8 +156,8 @@ namespace util::file {
 
         // get min / max line numbers
 
-        int minL = min(min_l, max_l);
-        int maxL = max(min_l, max_l);
+        int minL = min(0, max_l);
+        int maxL = max(0, max_l);
 
         int lineN = 0;
 
@@ -187,25 +187,33 @@ namespace util::file {
         }
 
         // output seleted lines to output file
+        for(outline = inputlines.begin() + minL; outline < inputlines.begin() + maxL; outline++) {
+
+            fprintf(fw, "%s\n", *outline);
+
+            free((void *) *outline); // free memory also
+        }
+        fclose(fi);    // close input file
+        fclose(fw);    // close output file
+
         /**
-         * Todo, the remainder should go in another file
+         * Reopen input in read mode to mutate
          */
-        for(outline = inputlines.begin(); outline < inputlines.end(); outline++)
-        {
-            if ((lineN >= minL) && (lineN <= maxL))
-            {
-                fprintf(fw, "%s\n", *outline);
-            }
-            lineN++;
+        FILE* fupdate = fopen( input_file, "w" );
+        if( !fupdate ){
+            printf("ERROR: cannot read output file %s\n",  input_file);
+            return -1; // all not OK
+        }
+
+        for(outline = inputlines.begin() + maxL; outline < inputlines.end(); outline++) {
+
+            fprintf(fupdate, "%s\n", *outline);
 
             free((void *) *outline); // free memory also
         }
 
-        // close files
-
-        fclose(fi);
-        fclose(fw);
-
+        fclose(fupdate);
+        // all files closed
         return 1;
     }
 }

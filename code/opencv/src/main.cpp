@@ -141,7 +141,7 @@ auto randomize_and_split(int argc, char** argv) -> int {
         return -1;
     }
 
-    if (split_csv_data(0, 10, argv[3], argv[4]) != 1) {
+    if (split_csv_data(20, argv[3], argv[4]) != 1) {
         std::cerr << "Data splitting failed" << std::endl;
         return -1;
     }

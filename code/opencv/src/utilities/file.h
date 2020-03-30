@@ -20,7 +20,7 @@ namespace util::file {
     auto randomize_data_in_csv(const char* input_file, const char* output_file) -> int;
 
     // This can be in place
-    auto split_csv_data(int min_l, int max_l, const char* input_file, const char* output_file) -> int;
+    auto split_csv_data(int max_l, const char* input_file, const char* output_file) -> int;
     //auto write_csv() -> void;
 }
 
