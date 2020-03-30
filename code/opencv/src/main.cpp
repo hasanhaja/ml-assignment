@@ -5,6 +5,7 @@
 #include <iostream>
 #include <opencv2/opencv.hpp>
 #include <string>
+#include "utilities/file.h"
 
 auto run_tests() -> void {
     // test 1 should be the csv reading test
@@ -23,8 +24,7 @@ auto run_methods(int argc, char** argv) -> int;
 auto main(int argc, char** argv) -> int {
 
     /**
-     * Todo: run flags
-     * ./progname --dataprep
+     * ./progname --dataprep raw.data ad.train ad.test percent
      * ./progname ad.train ad.test
      */
     std::string prep_flag = "--dataprep";
@@ -116,12 +116,35 @@ auto run_methods(int argc, char** argv) -> int {
     return 0;
 }
 
+/**
+ * Run flag and params
+ * ./progname --dataprep raw.data ad.train ad.test percent
+ * @param argc
+ * @param argv
+ * @return
+ */
 auto randomize_and_split(int argc, char** argv) -> int {
-    std::cout << "Entering data prep mode" << std::endl;
+    using namespace util::file;
 
     /**
      * NOTE: argv[1] is the flag --dataprep, so start at argv[2]
      */
+    if (argc < 6) {
+        std::cerr << "Not enough arguments for data prep." << std::endl;
+        return -1;
+    }
+
+    std::cout << "Entering data prep mode" << std::endl;
+
+    if (randomize_data_in_csv(argv[2], argv[3]) != 1) {
+        std::cerr << "Randomization failed." << std::endl;
+        return -1;
+    }
+
+    if (split_csv_data(0, 10, argv[3], argv[4]) != 1) {
+        std::cerr << "Data splitting failed" << std::endl;
+        return -1;
+    }
 
     std::cout << "Data prep complete." << std::endl;
     return 0;
