@@ -126,6 +126,8 @@ auto run_methods(int argc, char** argv) -> int {
 auto randomize_and_split(int argc, char** argv) -> int {
     using namespace util::file;
 
+    int percentage;
+
     /**
      * NOTE: argv[1] is the flag --dataprep, so start at argv[2]
      */
@@ -134,14 +136,31 @@ auto randomize_and_split(int argc, char** argv) -> int {
         return -1;
     }
 
-    std::cout << "Entering data prep mode" << std::endl;
+    try {
+        percentage = std::stoi(argv[5]);
+        std::cout << "Percentage of data for test = " << percentage << "%" << std::endl;
+
+        if (percentage > 100 || percentage < 0 ) {
+            throw std::out_of_range("ERROR: Enter a whole number percentage value between 0 and 100.");
+        }
+
+    } catch (const std::invalid_argument& e) {
+        std::cerr << "ERROR: Enter a whole number percentage value between 0 and 100." << std::endl;
+        std::cerr << e.what() << std::endl;
+        return -1;
+    } catch (const std::out_of_range& e) {
+        std::cerr << e.what() << std::endl;
+        return -1;
+    }
+
+    std::cout << "Entering data prep mode..." << std::endl;
 
     if (randomize_data_in_csv(argv[2], argv[3]) != 1) {
         std::cerr << "Randomization failed." << std::endl;
         return -1;
     }
 
-    if (split_csv_data(20, argv[3], argv[4]) != 1) {
+    if (split_csv_data(percentage, argv[3], argv[4]) != 1) {
         std::cerr << "Data splitting failed" << std::endl;
         return -1;
     }

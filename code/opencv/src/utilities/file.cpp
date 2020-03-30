@@ -7,9 +7,12 @@
 namespace util::file {
 
     namespace {
-        auto calculate_max_line(int percentage) -> int {
-
+        auto calculate_max_line(int percentage, int file_size) -> int {
             int max;
+
+            double percentage_d = ((double) percentage) / 100.0;
+            double max_d = ((double) file_size) * percentage_d;
+            max = (int) std::ceil(max_d);
 
             return max;
         }
@@ -146,20 +149,13 @@ namespace util::file {
         return 1;
     }
 
-    auto split_csv_data(int max_l, const char* input_file, const char* output_file) -> int {
+    auto split_csv_data(int percentage, const char* input_file, const char* output_file) -> int {
         using namespace std;
 
         vector<char *> inputlines; 				// vector of input lines
         vector<char *>::iterator outline;		// iterator for above
 
         char * line = nullptr;						// tmp pointer for line memory
-
-        // get min / max line numbers
-
-        int minL = min(0, max_l);
-        int maxL = max(0, max_l);
-
-        int lineN = 0;
 
         // open input file
 
@@ -185,6 +181,14 @@ namespace util::file {
             fscanf(fi, "%[^\n]\n", line);
             inputlines.push_back(line);
         }
+
+        // get min / max line numbers
+        int max_l = calculate_max_line(percentage, ((int) inputlines.size()));
+
+        int minL = min(0, max_l);
+        int maxL = max(0, max_l);
+
+        int lineN = 0;
 
         // output seleted lines to output file
         for(outline = inputlines.begin() + minL; outline < inputlines.begin() + maxL; outline++) {

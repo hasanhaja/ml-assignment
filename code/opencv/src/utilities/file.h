@@ -7,10 +7,13 @@
 
 #include <cstdio>
 #include <cstdlib>
+#include <cmath>
 #include <random>
 #include <opencv2/core/mat.hpp>
 #include "constants.h"
 #include <vector>
+
+#include <iostream>
 
 namespace util::file {
     const int LINELENGTHMAX = 5000;
@@ -20,7 +23,7 @@ namespace util::file {
     auto randomize_data_in_csv(const char* input_file, const char* output_file) -> int;
 
     // This can be in place
-    auto split_csv_data(int max_l, const char* input_file, const char* output_file) -> int;
+    auto split_csv_data(int percentage, const char* input_file, const char* output_file) -> int;
     //auto write_csv() -> void;
 }
 
