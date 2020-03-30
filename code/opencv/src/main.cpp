@@ -1,5 +1,10 @@
+/**
+ * Created by Hasan on 29/03/20.
+ */
+
 #include <iostream>
 #include <opencv2/opencv.hpp>
+#include <string>
 
 auto run_tests() -> void {
     // test 1 should be the csv reading test
@@ -12,7 +17,27 @@ auto decision_tree(int argc, char** argv) -> int;
 auto boost_tree(int argc, char** argv) -> int;
 auto forest(int argc, char** argv) -> int;
 
+auto randomize_and_split(int argc, char** argv) -> int;
+auto run_methods(int argc, char** argv) -> int;
+
 auto main(int argc, char** argv) -> int {
+
+    /**
+     * Todo: run flags
+     * ./progname --dataprep
+     * ./progname ad.train ad.test
+     */
+    std::string prep_flag = "--dataprep";
+    
+    if (prep_flag.compare(argv[1]) == 0) {
+        return randomize_and_split(argc, argv);
+    }
+
+    //return randomize_and_split(argc, argv);
+    return run_methods(argc, argv);
+}
+
+auto run_methods(int argc, char** argv) -> int {
 
     /**
      * Todo: What do I have to do with the "3 continous and others binary" information?
@@ -88,5 +113,12 @@ auto main(int argc, char** argv) -> int {
 
     std::cout << "All the methods have finished. Program exited." << std::endl;
 
+    return 0;
+}
+
+auto randomize_and_split(int argc, char** argv) -> int {
+    std::cout << "Entering data prep mode" << std::endl;
+
+    std::cout << "Data prep complete." << std::endl;
     return 0;
 }

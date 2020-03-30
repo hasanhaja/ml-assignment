@@ -75,4 +75,12 @@ namespace util::file {
         return 1; // all okay
     }
 
+    auto randomize_data_in_csv() -> void {
+        std::vector<int> v = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+
+        std::random_device rd;
+        std::mt19937 g(rd());
+
+        std::shuffle(v.begin(), v.end(), g);
+    }
 }
