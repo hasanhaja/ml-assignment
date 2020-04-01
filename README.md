@@ -8,4 +8,4 @@ This project holds the machine learning assignment for the Machine Learning modu
 
 # Maintenance
 
-This project is not planned to be maintained past the date of submission, 30 Mar 2020.
+This project is not planned to be maintained past the date of submission, 03 Apr 2020.

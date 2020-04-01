@@ -14,6 +14,8 @@
 #include <vector>
 
 #include <iostream>
+#include <fstream>
+#include <string>
 
 namespace util::file {
     const int LINELENGTHMAX = 5000;
@@ -24,7 +26,8 @@ namespace util::file {
 
     // This can be in place
     auto split_csv_data(int percentage, const char* input_file, const char* output_file) -> int;
-    //auto write_csv() -> void;
+
+    auto count_lines(const char* filename) -> int;
 }
 
 #endif //OPENCV_FILE_H

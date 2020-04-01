@@ -75,9 +75,12 @@ Comparison of the methods:
 
 ## Data splitting
 
-The data was split into various proportions for training and testing. These proportions were adjusted in 10% intervals to observe the change in accuracy of the system.
+The data was split into various proportions for training and testing. These proportions were adjusted in 10% intervals to observe the change in accuracy of the system. The function was adapted using the `selectlines.cc` and `randomize.cc` provided with the project to split the provided data. There were a few caveats with this approach:
 
-There were a total of 2359 data points, of which 1978 were nonads and 381 were ads. **TODO** The proportion of this data maintained when splicing the data for training and testing, and the data was selected randomly.
+- The `selectlines.cc` method copies a portion of the source file to a destination file and does not split the file. This had to be refactored so that it splits the data in the destination file in two: the training data and the testing data.
+- The `random_shuffle()` function used in `randomize.cc` has been removed since `C++17`, and the alternative `shuffle()` had to be used with a RNG object provided in the `<random>` header file.
+
+There were a total of 2359 data points, of which 1978 were nonads and 381 were ads and they were not shuffled in any fashion. Prior to splitting the data, the data was first shuffled and then split from start to a particular percentage of the file. This ensured that the splitting method used was not only taking one aspect of the data since it was not shuffled when selecting from the top, because the data was shuffled first and it would not make a difference.
 
 # Results and discussion
 

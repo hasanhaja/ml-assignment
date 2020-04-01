@@ -25,7 +25,7 @@ using namespace util::consts;
 using namespace util::file;
 /******************************************************************************/
 
-auto decision_tree(int argc, char** argv) -> int {
+auto decision_tree(const char* train_file, const char* test_file) -> int {
 
     // define training data storage matrices (one for attribute examples, one
     // for classifications)
@@ -50,8 +50,8 @@ auto decision_tree(int argc, char** argv) -> int {
 
     // load training and testing data sets
 
-    if (read_data_from_csv(argv[1], training_data, training_classifications, NUMBER_OF_TRAINING_SAMPLES) &&
-        read_data_from_csv(argv[2], testing_data, testing_classifications, NUMBER_OF_TESTING_SAMPLES)) {
+    if (read_data_from_csv(train_file, training_data, training_classifications, NUMBER_OF_TRAINING_SAMPLES) &&
+        read_data_from_csv(test_file, testing_data, testing_classifications, NUMBER_OF_TESTING_SAMPLES)) {
 
         //*********************************************************************
 
@@ -77,7 +77,7 @@ auto decision_tree(int argc, char** argv) -> int {
 
         // train decision tree classifier (using training data)
 
-        printf("\nUsing training database: %s\n\n", argv[1]);
+        printf("\nUsing training database: %s\n\n", train_file);
 
         dtree->train(training_data, ROW_SAMPLE, training_classifications);
 
@@ -88,7 +88,7 @@ auto decision_tree(int argc, char** argv) -> int {
         int wrong_class = 0;
         int false_positives[NUMBER_OF_CLASSES] = { 0,0 };
 
-        printf("\nUsing testing database: %s\n\n", argv[2]);
+        printf("\nUsing testing database: %s\n\n", test_file);
 
         for (int tsample = 0; tsample < NUMBER_OF_TESTING_SAMPLES; tsample++)
         {
@@ -129,7 +129,7 @@ auto decision_tree(int argc, char** argv) -> int {
         printf("\nResults on the testing database: %s\n"
                "\tCorrect classification: %d (%g%%)\n"
                "\tWrong classifications: %d (%g%%)\n",
-               argv[2],
+               test_file,
                correct_class, (double)correct_class * 100 / NUMBER_OF_TESTING_SAMPLES,
                wrong_class, (double)wrong_class * 100 / NUMBER_OF_TESTING_SAMPLES);
 

@@ -18,6 +18,19 @@ namespace util::file {
         }
     }
 
+    auto count_lines(const char* filename) -> int {
+        int count = 0;
+
+        std::string data;
+        std::ifstream file(filename);
+
+        while(std::getline(file, data)) {
+            count++;
+        }
+
+        return count;
+    }
+
     auto read_data_from_csv(const char* filename, cv::Mat& data, cv::Mat& classes, int n_samples) -> int {
         using namespace util::consts;
         using namespace std;
