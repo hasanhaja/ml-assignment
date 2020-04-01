@@ -15,14 +15,19 @@ auto run_tests() -> void {
 /**
  * Placeholder until runner class is written
  */
-auto decision_tree(const char* train_file, const char* test_file) -> int;
-auto boost_tree(const char* train_file, const char* test_file) -> int;
-auto forest(const char* train_file, const char* test_file) -> int;
+auto decision_tree(const char* train_file, const char* test_file, int no_of_training_samples, int no_of_testing_samples) -> int;
+auto boost_tree(const char* train_file, const char* test_file, int no_of_training_samples, int no_of_testing_samples) -> int;
+auto forest(const char* train_file, const char* test_file, int no_of_training_samples, int no_of_testing_samples) -> int;
 
 auto randomize_and_split(int argc, char** argv) -> int;
 auto run_methods(const char* train_file, const char* test_file) -> int;
 
 auto main(int argc, char* argv[]) -> int {
+
+    if (argc < 2) {
+        std::cerr << "ERROR: Not enough arguments for the program." << std::endl;
+        return -1;
+    }
 
     /**
      * ./progname --dataprep raw.data ad.train ad.test percent
@@ -56,7 +61,7 @@ auto run_methods(const char* train_file, const char* test_file) -> int {
     auto training_data_size = util::file::count_lines(train_file);
     auto testing_data_size = util::file::count_lines(test_file);
 
-    util::Runner method(train_file, test_file);
+    util::Runner method(train_file, test_file, training_data_size, testing_data_size);
 
     /**
      * Method 1 starts and produces results
@@ -66,20 +71,18 @@ auto run_methods(const char* train_file, const char* test_file) -> int {
     /**
      * Method 2 starts and produces results
      */
-    //method.run(boost_tree, "Boost tree");
+    method.run(boost_tree, "Boost tree");
 
     /**
      * Method 3 starts and produces results
      */
-    //method.run(forest, "Forest");
+    method.run(forest, "Forest");
 
     /**
      * ----------- All methods finished -----------
      */
 
     std::cout << "All the methods have finished. Program exited." << std::endl;
-    std::cout << training_data_size << " : " << testing_data_size << std::endl;
-    
     return 0;
 }
 
@@ -99,7 +102,7 @@ auto randomize_and_split(int argc, char* argv[]) -> int {
      * NOTE: argv[1] is the flag --dataprep, so start at argv[2]
      */
     if (argc < 6) {
-        std::cerr << "Not enough arguments for data prep." << std::endl;
+        std::cerr << "ERROR: Not enough arguments for data preparation." << std::endl;
         return -1;
     }
 

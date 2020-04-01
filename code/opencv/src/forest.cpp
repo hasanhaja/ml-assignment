@@ -30,19 +30,21 @@ using namespace util::consts;
 using namespace util::file;
 /******************************************************************************/
 
-auto forest(const char* train_file, const char* test_file) -> int {
+auto forest(const char* train_file, const char* test_file, int no_of_training_samples, int no_of_testing_samples) -> int {
 
+//    int no_of_training_samples = NUMBER_OF_TRAINING_SAMPLES;
+//    int no_of_testing_samples = NUMBER_OF_TESTING_SAMPLES;
 
     // define training data storage matrices (one for attribute examples, one
     // for classifications)
 
-    Mat training_data = Mat(NUMBER_OF_TRAINING_SAMPLES, ATTRIBUTES_PER_SAMPLE, CV_32FC1);
-    Mat training_classifications = Mat(NUMBER_OF_TRAINING_SAMPLES, 1, CV_32FC1);
+    Mat training_data = Mat(no_of_training_samples, ATTRIBUTES_PER_SAMPLE, CV_32FC1);
+    Mat training_classifications = Mat(no_of_training_samples, 1, CV_32FC1);
 
     //define testing data storage matrices
 
-    Mat testing_data = Mat(NUMBER_OF_TESTING_SAMPLES, ATTRIBUTES_PER_SAMPLE, CV_32FC1);
-    Mat testing_classifications = Mat(NUMBER_OF_TESTING_SAMPLES, 1, CV_32FC1);
+    Mat testing_data = Mat(no_of_testing_samples, ATTRIBUTES_PER_SAMPLE, CV_32FC1);
+    Mat testing_classifications = Mat(no_of_testing_samples, 1, CV_32FC1);
 
     // define all the attributes as numerical (** not needed for all ML techniques **)
 
@@ -59,8 +61,8 @@ auto forest(const char* train_file, const char* test_file) -> int {
     // load training and testing data sets
 
 
-    if (read_data_from_csv(train_file, training_data, training_classifications, NUMBER_OF_TRAINING_SAMPLES) &&
-        read_data_from_csv(test_file, testing_data, testing_classifications, NUMBER_OF_TESTING_SAMPLES)) {
+    if (read_data_from_csv(train_file, training_data, training_classifications, no_of_training_samples) &&
+        read_data_from_csv(test_file, testing_data, testing_classifications, no_of_testing_samples)) {
 
         //*********************************************************************
 
@@ -103,7 +105,7 @@ auto forest(const char* train_file, const char* test_file) -> int {
 
         printf("\nUsing testing database: %s\n\n", test_file);
 
-        for (int tsample = 0; tsample < NUMBER_OF_TESTING_SAMPLES; tsample++)
+        for (int tsample = 0; tsample < no_of_testing_samples; tsample++)
         {
 
             // extract a row from the testing matrix
@@ -142,14 +144,14 @@ auto forest(const char* train_file, const char* test_file) -> int {
                "\tCorrect classification: %d (%g%%)\n"
                "\tWrong classifications: %d (%g%%)\n",
                test_file,
-               correct_class, (double)correct_class * 100 / NUMBER_OF_TESTING_SAMPLES,
-               wrong_class, (double)wrong_class * 100 / NUMBER_OF_TESTING_SAMPLES);
+               correct_class, (double)correct_class * 100 / no_of_testing_samples,
+               wrong_class, (double)wrong_class * 100 / no_of_testing_samples);
 
         for (int i = 0; i < NUMBER_OF_CLASSES; i++)
         {
             printf("\tClass (digit %d) false postives 	%d (%g%%)\n", i,
                    false_positives[i],
-                   (double)false_positives[i] * 100 / NUMBER_OF_TESTING_SAMPLES);
+                   (double)false_positives[i] * 100 / no_of_testing_samples);
         }
 
         //*********************************************************************

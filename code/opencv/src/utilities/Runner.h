@@ -27,7 +27,7 @@ namespace util {
 
     public:
         Runner(const char* train_data, const char * test_data, int no_of_training_samples = 2359, int no_of_testing_samples = 2359);
-        auto run(std::function<int(const char*, const char*)> method, const char* method_label) -> int;
+        auto run(std::function<int(const char*, const char*, int, int)> method, const char* method_label) -> int;
 
         ~Runner();
     };
