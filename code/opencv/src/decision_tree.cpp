@@ -27,9 +27,6 @@ using namespace util::file;
 
 auto decision_tree(const char* train_file, const char* test_file, int no_of_training_samples, int no_of_testing_samples) -> int {
 
-//    int no_of_training_samples = NUMBER_OF_TRAINING_SAMPLES;
-//    int no_of_testing_samples = NUMBER_OF_TESTING_SAMPLES;
-
     // define training data storage matrices (one for attribute examples, one
     // for classifications)
 
@@ -62,20 +59,21 @@ auto decision_tree(const char* train_file, const char* test_file, int no_of_trai
 
         // define the parameters for training the decision tree
         std::vector<double> priors(2); // weights of each classification for classes
-        priors[0] = 1;
-        priors[1] = 1;
+        // 0 nonad 1 ad
+        priors[0] = 0.8074;
+        priors[1] = 0.1926;
         // weights of each classification for classes
         // (all equal as equal samples of each digit)
 
         Ptr<DTrees> dtree = DTrees::create();
         dtree->setMaxDepth(25);// max depth
-        dtree->setMinSampleCount(5);// min sample count
+        dtree->setMinSampleCount(3);// min sample count
         dtree->setRegressionAccuracy(0);// regression accuracy: N/A here
         dtree->setUseSurrogates(false);// compute surrogate split, no missing data
         dtree->setMaxCategories(15);// max number of categories (use sub-optimal algorithm for larger numbers)
         dtree->setCVFolds(1);// the number of cross-validation folds
-        dtree->setUse1SERule(false);// use 1SE rule => smaller tree
-        dtree->setTruncatePrunedTree(false);// throw away the pruned tree branches
+        dtree->setUse1SERule(true);// use 1SE rule => smaller tree
+        dtree->setTruncatePrunedTree(true);// throw away the pruned tree branches
         dtree->setPriors(Mat(priors));// the array of priors
 
         // train decision tree classifier (using training data)
@@ -104,7 +102,7 @@ auto decision_tree(const char* train_file, const char* test_file, int no_of_trai
 
             float result = dtree->predict(test_sample, noArray(), StatModel::Flags::RAW_OUTPUT);
 
-            printf("Testing Sample %i -> class result (digit %d)\n", tsample, (int)result);
+            //printf("Testing Sample %i -> class result (digit %d)\n", tsample, (int)result);
 
             // if the prediction and the (true) testing classification are the same
             // (N.B. openCV uses a floating point decision tree implementation!)
@@ -138,7 +136,7 @@ auto decision_tree(const char* train_file, const char* test_file, int no_of_trai
 
         for (int i = 0; i < NUMBER_OF_CLASSES; i++)
         {
-            printf("\tClass (digit %d) false postives 	%d (%g%%)\n", i,
+            printf("\tClass (digit %d) false positives 	%d (%g%%)\n", i,
                    false_positives[i],
                    (double)false_positives[i] * 100 / no_of_testing_samples);
         }

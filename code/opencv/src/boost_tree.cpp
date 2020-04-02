@@ -28,9 +28,6 @@ using namespace util::file;
 
 auto boost_tree(const char* train_file, const char* test_file, int no_of_training_samples, int no_of_testing_samples) -> int {
 
-//    int no_of_training_samples = NUMBER_OF_TRAINING_SAMPLES;
-//    int no_of_testing_samples = NUMBER_OF_TESTING_SAMPLES;
-    
     // define training data storage matrices (one for attribute examples, one
     // for classifications)
 
@@ -127,9 +124,9 @@ auto boost_tree(const char* train_file, const char* test_file, int no_of_trainin
         // weights of each classification for classes
         // N.B. in the "unrolled" data we have an imbalance in the training examples
         std::vector<double> priors(2); // weights of each classification for classes
-        priors[0] = NUMBER_OF_CLASSES - 1;
-        priors[1] = 1;
-        //float priors[] = {1,1};
+        // 0 nonad 1 ad
+        priors[0] = 0.8074;
+        priors[1] = 0.1926;
 
         // set the boost parameters
 
@@ -142,7 +139,7 @@ auto boost_tree(const char* train_file, const char* test_file, int no_of_trainin
         // boosting weight < 1.0 - (trim rate)
         // from the next round of boosting
         // Used for computational saving only.
-        boostTree->setMaxDepth(25);						// max depth of trees
+        boostTree->setMaxDepth(23);						// max depth of trees
         boostTree->setUseSurrogates(false);				// compute surrogate split, no missing data
         boostTree->setPriors(Mat(priors));
 
@@ -152,8 +149,8 @@ auto boost_tree(const char* train_file, const char* test_file, int no_of_trainin
         boostTree->setMaxCategories(15);// max number of categories (use sub-optimal algorithm for larger numbers)
         boostTree->setMinSampleCount(5);// min sample count
         boostTree->setCVFolds(1);// cross validation folds
-        boostTree->setUse1SERule(false);// use 1SE rule => smaller tree
-        boostTree->setTruncatePrunedTree(false);// throw away the pruned tree branches
+        boostTree->setUse1SERule(true);// use 1SE rule => smaller tree
+        boostTree->setTruncatePrunedTree(true);// throw away the pruned tree branches
         boostTree->setRegressionAccuracy(0.0);// regression accuracy: N/A here
 
 
@@ -228,7 +225,7 @@ auto boost_tree(const char* train_file, const char* test_file, int no_of_trainin
             }
 
 
-            printf("Testing Sample %i -> class result (digit %d)\n", tsample, best_class);
+            //printf("Testing Sample %i -> class result (digit %d)\n", tsample, best_class);
 
             // if the prediction and the (true) testing classification are the same
             // (N.B. openCV uses a floating point decision tree implementation!)
@@ -261,7 +258,7 @@ auto boost_tree(const char* train_file, const char* test_file, int no_of_trainin
 
         for (int i = 0; i < NUMBER_OF_CLASSES; i++)
         {
-            printf("\tClass (digit %d) false postives 	%d (%g%%)\n", i,
+            printf("\tClass (digit %d) false positives 	%d (%g%%)\n", i,
                    false_positives[i],
                    (double)false_positives[i] * 100 / no_of_testing_samples);
         }
